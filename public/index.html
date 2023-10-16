@@ -6,8 +6,190 @@
   <link href="./dist/output.css" rel="stylesheet">
 </head>
 <body>
-  <h1 class="text-blue-100 text-5xl">
-    Hello woddrld!
-  </h1>
+  <div class="flex">
+  <div class="space-y-2">
+    <h2>Wearer</h2>
+    <div>
+        <h3>Weight</h3>
+        <input type="range" min="0" max="150" value="0" class="slider" id="sliderWearerWeight">
+        <span id="wearerWeightValue">0</span>
+    </div>
+
+    <div>
+        <h3>Fitness</h3>
+        <input type="range" min="0" max="10" value="0" class="slider" id="sliderWearerFitness">
+        <span id="wearerFitnessValue">0</span>
+    </div>
+    <!-- Load section -->
+    <h2>Load</h2>
+    <div>
+        <h3>On Back</h3>
+        <input type="range" min="0" max="200" value="0" class="slider" id="sliderLoadBack">
+        <span id="loadBackValue">0</span>
+    </div>
+    <div>
+        <h3>On Hand</h3>
+        <input type="range" min="0" max="100" value="0" class="slider" id="sliderLoadHand">
+        <span id="loadHandValue">0</span>
+    </div>
+
+    <!-- Gear section -->
+    <h2>Gear</h2>
+    <div>
+        <h3>Weight</h3>
+        <input type="range" min="0" max="100" value="0" class="slider" id="sliderGearWeight">
+        <span id="gearWeightValue">0</span>
+    </div>
+    <div>
+        <h3>Impending Movement</h3>
+        <input type="range" min="1" max="10" value="1" class="slider" id="sliderGearMovement">
+        <span id="gearMovementValue">1</span>
+    </div>
+
+    <!-- Task section -->
+    <h2>Task</h2>
+    <div>
+        <h3>Standing</h3>
+        <input type="range" min="0" max="100" value="0" class="slider" id="sliderTaskStanding">
+        <span id="taskStandingValue">0</span>
+    </div>
+    <div>
+        <h3>Walking</h3>
+        <input type="range" min="0" max="100" value="0" class="slider" id="sliderTaskWalking">
+        <span id="taskWalkingValue">0</span>
+    </div>
+    <div>
+        <h3>Stair Walking</h3>
+        <input type="range" min="0" max="100" value="0" class="slider" id="sliderTaskStairWalking">
+        <span id="taskStairWalkingValue">0</span>
+    </div>
+    <div>
+        <h3>Picking up Load</h3>
+        <input type="range" min="0" max="100" value="0" class="slider" id="sliderTaskPicking">
+        <span id="taskPickingValue">0</span>
+    </div>
+    <div>
+        <h3>Light forced Posture</h3>
+        <input type="range" min="0" max="100" value="0" class="slider" id="sliderTaskLightPosture">
+        <span id="taskLightPostureValue">0</span>
+    </div>
+    <div>
+        <h3>Difficult forced Posture</h3>
+        <input type="range" min="0" max="100" value="0" class="slider" id="sliderTaskDifficultPosture">
+        <span id="taskDifficultPostureValue">0</span>
+    </div>
+
+    <!-- Exoskeleton Setting section -->
+    <h2>Exoskeleton Setting</h2>
+    <div>
+        <h3>Load&Gear Support</h3>
+        <input type="range" min="0" max="100" value="0" class="slider" id="sliderExoLoadGearSupport">
+        <span id="exoLoadGearSupportValue">0</span>
+    </div>
+    <div>
+        <h3>Wearer Support</h3>
+        <input type="range" min="0" max="100" value="0" class="slider" id="sliderExoWearerSupport">
+        <span id="exoWearerSupportValue">0</span>
+    </div>
+    
+</div>
+<div class="output-section">
+  <h2>Ergebnisse</h2>
+  <p>Erwartete Herzfrequenz ohne Exoskellet: <span id="bpmWithoutExo">0</span> bpm</p>
+  <p>Erwartete Herzfrequenz mit Exoskellet: <span id="bpmWithExo">0</span> bpm</p>
+  <p>Erwartete Veränderung: <span id="bpmDifference">0</span> bpm</p>
+
+  <p>Erwarteter Energieverbrauch ohne Exoskellet: <span id="energyWithoutExo">0</span> Kj/h</p>
+  <p>Erwarteter Energieverbrauch mit Exoskellet: <span id="energyWithExo">0</span> Kj/h</p>
+  <p>Erwartete Veränderung: <span id="energyDifference">0</span> Kj/h</p>
+
+  <p>Erwartete Muskelentlastung: <span id="muscleRelief">0</span>%</p>
+  <p>Usability Score: <span id="usabilityScore">0</span></p>
+</div>
+</div>
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+  
+  const sliderWearerWeight = document.getElementById('sliderWearerWeight');
+const sliderWearerFitness = document.getElementById('sliderWearerFitness');
+
+const sliderLoadBack = document.getElementById('sliderLoadBack');
+const sliderLoadHand = document.getElementById('sliderLoadHand');
+
+const sliderGearWeight = document.getElementById('sliderGearWeight');
+const sliderGearMovement = document.getElementById('sliderGearMovement');
+
+const sliderTaskStanding = document.getElementById('sliderTaskStanding');
+const sliderTaskWalking = document.getElementById('sliderTaskWalking');
+const sliderTaskStairWalking = document.getElementById('sliderTaskStairWalking');
+const sliderTaskPicking = document.getElementById('sliderTaskPicking');
+const sliderTaskLightPosture = document.getElementById('sliderTaskLightPosture');
+const sliderTaskDifficultPosture = document.getElementById('sliderTaskDifficultPosture');
+
+const sliderExoLoadGearSupport = document.getElementById('sliderExoLoadGearSupport');
+const sliderExoWearerSupport = document.getElementById('sliderExoWearerSupport');
+
+
+  function updateValues() {
+    document.getElementById('wearerWeightValue').textContent = sliderWearerWeight.value;
+    document.getElementById('wearerFitnessValue').textContent = sliderWearerFitness.value;
+    document.getElementById('loadBackValue').textContent = sliderLoadBack.value;
+    document.getElementById('loadHandValue').textContent = sliderLoadHand.value;
+    document.getElementById('gearWeightValue').textContent = sliderGearWeight.value;
+    document.getElementById('gearMovementValue').textContent = sliderGearMovement.value;
+    document.getElementById('taskStandingValue').textContent = sliderTaskStanding.value;
+    document.getElementById('taskWalkingValue').textContent = sliderTaskWalking.value;
+    document.getElementById('taskStairWalkingValue').textContent = sliderTaskStairWalking.value;
+    document.getElementById('taskPickingValue').textContent = sliderTaskPicking.value;
+    document.getElementById('taskLightPostureValue').textContent = sliderTaskLightPosture.value;
+    document.getElementById('taskDifficultPostureValue').textContent = sliderTaskDifficultPosture.value;
+    document.getElementById('exoLoadGearSupportValue').textContent = sliderExoLoadGearSupport.value;
+    document.getElementById('exoWearerSupportValue').textContent = sliderExoWearerSupport.value;
+
+
+    const bpmWithoutExo = 60 + (+sliderWearerWeight.value / 2) + +sliderTaskWalking.value;
+const bpmWithExo = bpmWithoutExo - (+sliderExoLoadGearSupport.value / 2) - (+sliderExoWearerSupport.value / 2);
+const bpmDifference = bpmWithoutExo - bpmWithExo;
+
+const energyWithoutExo = 200 + (+sliderWearerWeight.value * 1.5) + (+sliderGearWeight.value * 2);
+const energyWithExo = energyWithoutExo - (+sliderExoLoadGearSupport.value * 2) - (+sliderExoWearerSupport.value * 2);
+const energyDifference = energyWithoutExo - energyWithExo;
+const muscleRelief = (+sliderExoLoadGearSupport.value + +sliderExoWearerSupport.value) / 2;
+const usabilityScore = (10 - +sliderTaskDifficultPosture.value / 10) + (+sliderExoWearerSupport.value / 20);
+      document.getElementById('bpmWithoutExo').textContent = bpmWithoutExo.toFixed(2);
+    document.getElementById('bpmWithExo').textContent = bpmWithExo.toFixed(2);
+    document.getElementById('bpmDifference').textContent = bpmDifference.toFixed(2);
+      
+    document.getElementById('energyWithoutExo').textContent = energyWithoutExo.toFixed(2);
+    document.getElementById('energyWithExo').textContent = energyWithExo.toFixed(2);
+    document.getElementById('energyDifference').textContent = energyDifference.toFixed(2);
+
+    document.getElementById('muscleRelief').textContent = muscleRelief.toFixed(2);
+    document.getElementById('usabilityScore').textContent = usabilityScore.toFixed(2);
+  }
+
+
+sliderWearerWeight.addEventListener('input', updateValues);
+sliderWearerFitness.addEventListener('input', updateValues);
+sliderLoadBack.addEventListener('input', updateValues);
+sliderLoadHand.addEventListener('input', updateValues);
+sliderGearWeight.addEventListener('input', updateValues);
+sliderGearMovement.addEventListener('input', updateValues);
+sliderTaskStanding.addEventListener('input', updateValues);
+sliderTaskWalking.addEventListener('input', updateValues);
+sliderTaskStairWalking.addEventListener('input', updateValues);
+sliderTaskPicking.addEventListener('input', updateValues);
+sliderTaskLightPosture.addEventListener('input', updateValues);
+sliderTaskDifficultPosture.addEventListener('input', updateValues);
+sliderExoLoadGearSupport.addEventListener('input', updateValues);
+sliderExoWearerSupport.addEventListener('input', updateValues);
+
+
+
+
+
+
+});
+</script>
 </body>
-</html>
+</html> 
