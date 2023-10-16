@@ -19,8 +19,11 @@
 
 .dragger {
     height: 5px;
+    padding: 15px 0; /* Fügt einen unsichtbaren Berührungsbereich hinzu */
+    margin: -15px 0; /* Gleicht das zusätzliche Padding aus */
     background-color: #333;
     cursor: ns-resize;
+    box-sizing: content-box; /* Stellt sicher, dass Padding und Border nicht zur Gesamthöhe beitragen */
 }
 
   </style>
@@ -184,16 +187,38 @@ let isDragging = false;
 let startY;
 let startHeightSection1;
 
-dragger.addEventListener('mousedown', (e) => {
+
+dragger.addEventListener('mousedown', startDragging);
+dragger.addEventListener('touchstart', startDragging, { passive: false });
+
+function startDragging(e) {
+    if (e.type === 'touchstart') {
+        e.preventDefault(); // Verhindert Standard-Touch-Events (z. B. Scrollen)
+        startY = e.touches[0].clientY; // Nutzt den ersten Touch-Punkt
+    } else {
+        startY = e.clientY;
+    }
     isDragging = true;
-    startY = e.clientY;
     startHeightSection1 = section1.offsetHeight;
 
-    document.addEventListener('mousemove', onMouseMove);
-    document.addEventListener('mouseup', onMouseUp);
-});
+    if (e.type === 'touchstart') {
+        document.addEventListener('touchmove', onMouseMove, { passive: false });
+        document.addEventListener('touchend', onMouseUp);
+    } else {
+        document.addEventListener('mousemove', onMouseMove);
+        document.addEventListener('mouseup', onMouseUp);
+    }
+}
+
+// Passen Sie die onMouseMove-Funktion an, um sowohl Maus- als auch Touch-Events zu verarbeiten:
 
 function onMouseMove(e) {
+    if (e.type === 'touchmove') {
+        e.preventDefault(); // Verhindert Standard-Touch-Events (z. B. Scrollen)
+        var currentY = e.touches[0].clientY; // Nutzt den ersten Touch-Punkt
+    } else {
+        var currentY = e.clientY;
+    }
     if (!isDragging) return;
 
     const deltaY = e.clientY - startY;
@@ -209,7 +234,11 @@ function onMouseMove(e) {
     const percentage1 = (section1.offsetHeight / bar.offsetHeight) * 100;
     const percentage2 = 100 - percentage1;
     console.log(`Section 1: ${percentage1.toFixed(2)}%, Section 2: ${percentage2.toFixed(2)}%`);
+    // Rest des Codes bleibt gleich
 }
+
+// Die onMouseUp-Funktion kann unverändert bleiben, da sie nicht auf die spezifische Event-Quelle (Touch oder Maus) angewiesen ist.
+
 
 function onMouseUp() {
     isDragging = false;
